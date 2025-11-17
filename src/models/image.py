@@ -40,7 +40,6 @@ class ImageFeatures:
     format: формат изображения
     mean_brightness: средняя яркость
     contrast: стандартное отклонение яркости
-    dominant_color: основной цвет [R,G,B] (опционально)
     computed_at: время вычисления признаков
     """
     id: str

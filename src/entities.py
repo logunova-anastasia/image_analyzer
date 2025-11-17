@@ -78,7 +78,6 @@ class ImageFeatures:
     format: формат изображения
     mean_brightness: средняя яркость
     contrast: стандартное отклонение яркости
-    dominant_color: основной цвет [R,G,B] (опционально)
     computed_at: время вычисления признаков
     """
     id: str
@@ -104,5 +103,4 @@ class Visualiser:
     """
     id: str
     metrics_enabled: List[str]
-    calc_histogram: bool = True
-    histogram_bins: int = 256
+    histogram_bins: int

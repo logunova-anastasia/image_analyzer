@@ -9,5 +9,4 @@ class Visualiser:
     """
     id: str
     metrics_enabled: List[str]
-    calc_histogram: bool = True
-    histogram_bins: int = 256
+    histogram_bins: int
