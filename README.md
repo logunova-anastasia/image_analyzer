@@ -14,3 +14,12 @@
 - Сохраняет результаты анализа и историю изменений в JSON.
 - Визуализирует модифицированные данные.
 
+## Setup 
+```
+# Клонирование репозитория
+git clone https://github.com/logunova-anastasia/image_analyzer
+cd image_analyzer
+
+# Установка зависимостей
+poetry install
+```
