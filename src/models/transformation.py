@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict
 from datetime import datetime
+
+from ..core.processing import Options
 
 
 @dataclass
@@ -14,8 +15,9 @@ class TransformationRecord:
     params: параметры трансформации
     applied_at: время применения
     """
+
     id: str
     image_id: str
-    name: str
-    params: Dict
+    name: Options
+    params: dict
     applied_at: datetime

@@ -1,21 +1,37 @@
-from typing import Tuple, Dict, Optional
+import os
+from datetime import datetime
+
 from PIL import Image
-import numpy as np
+
+from ..models.image import ImageData
+from ..models.source import ImageSource
 
 
-def load_image(path: str) -> Tuple[Image.Image, Dict]:
+def load_image(path: str) -> tuple[Image.Image, ImageSource, ImageData]:
     """
-    Загружает изображение и возвращает (PIL.Image, meta_dict).
-    meta_dict: width, height, format, mode, filesize, path, filename
+    Загружает изображение и возвращает (PIL.Image, ImageSource, ImageData).
     """
-    pass
+    img = Image.open(path)
+
+    source = ImageSource(location=os.path.abspath(path), filename=os.path.basename(os.path.abspath(path)))
+
+    data = ImageData(source=source, history=[], created_at=datetime.utcnow(), updated_at=None)
+
+    return img, source, data
 
 
-def save_image(img: Image.Image, path: str, format: Optional[str] = None) -> None:
+def save_image(img: Image.Image, path: str, formatting: str | None = None) -> None:
     """Сохраняет изображение по пути."""
-    pass
+    if formatting is None:
+        ext = os.path.splitext(path)[1].lower()
+        if ext == '.jpg' or ext == '.jpeg':
+            formatting = 'JPEG'
+        elif ext == '.png':
+            formatting = 'PNG'
+        elif ext == '.webp':
+            formatting = 'WEBP'
+        else:
+            formatting = img.format or 'PNG'
 
-
-def image_to_array(img: Image.Image) -> np.ndarray:
-    """Конвертирует PIL.Image в numpy array."""
-    pass
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    img.save(path, format=formatting)

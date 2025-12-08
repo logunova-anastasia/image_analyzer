@@ -1,6 +1,6 @@
 [project]
 name = "image-analyzer"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = [
     {name = "Logunova Anastasiia"}
@@ -8,9 +8,41 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "Pillow>=9.0.0",
+    "numpy>=1.24",
+    "matplotlib>=3.6",
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.2"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "N", "C4", "SIM"]
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.isort]
+line_length = 120
+profile = "black"          
+multi_line_output = 3
+include_trailing_comma = true
+combine_as_imports = true
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+ignore_missing_imports = true
+check_untyped_defs = true

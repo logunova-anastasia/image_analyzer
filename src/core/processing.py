@@ -1,37 +1,75 @@
-from typing import Tuple, Any
-from PIL import Image
+from enum import Enum
+from typing import Any
+
+import numpy as np
+from PIL import Image, ImageEnhance, ImageFilter
 
 
 def compute_mean_brightness(img: Image.Image) -> float:
     """Вычисляет среднюю яркость (grayscale)."""
-    pass
+    gray = img.convert('L')
+    arr = np.asarray(gray, dtype=np.float32)
+    return float(arr.mean())
 
 
 def compute_contrast(img: Image.Image) -> float:
     """Вычисляет контраст (std dev яркости)."""
-    pass
+    gray = img.convert('L')
+    arr = np.asarray(gray, dtype=np.float32)
+    return float(arr.std())
 
 
 def compute_edge_density(img: Image.Image) -> float:
     """Оценивает плотность краёв изображения."""
-    pass
+    gray = img.convert('L')
+    edges = gray.filter(ImageFilter.FIND_EDGES)
+
+    arr = np.asarray(edges, dtype=np.float32)
+    edges_mask = arr > 128
+    density = edges_mask.mean()
+    return float(density)
 
 
-def resize(img: Image.Image, size: Tuple[int, int]) -> Image.Image:
+class Options(Enum):
+    Resize = 1
+    Brightness = 2
+    Contrast = 3
+    Filter = 4
+
+
+def resize(img: Image.Image, size: tuple[int, int]) -> Image.Image:
     """Изменение размера изображения."""
-    pass
+    return img.resize(size)
 
 
 def change_brightness(img: Image.Image, factor: float) -> Image.Image:
     """Изменение яркости (factor: 1.0 = no change)."""
-    pass
+    enhancer = ImageEnhance.Brightness(img)
+    return enhancer.enhance(factor)
 
 
 def change_contrast(img: Image.Image, factor: float) -> Image.Image:
     """Изменение контраста."""
-    pass
+    enhancer = ImageEnhance.Contrast(img)
+    return enhancer.enhance(factor)
 
 
-def apply_filter(img: Image.Image, filter_name: str, **params: Any) -> Image.Image:
+def apply_filter(img: Image.Image, params: dict[str, Any]) -> Image.Image:
     """Применяет фильтр (blur, sharpen, edge_enhance и т.п.)."""
-    pass
+    ftype = params.get('type')
+
+    if ftype == 'blur':
+        radius = params.get('radius', 2)
+        return img.filter(ImageFilter.GaussianBlur(radius))
+
+    elif ftype == 'sharpen':
+        return img.filter(ImageFilter.SHARPEN)
+
+    elif ftype == 'edge_enhance':
+        return img.filter(ImageFilter.EDGE_ENHANCE)
+
+    elif ftype == 'edges':
+        return img.filter(ImageFilter.FIND_EDGES)
+
+    else:
+        raise ValueError(f'Unknown filter type: {ftype}')

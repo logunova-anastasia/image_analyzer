@@ -1,8 +1,9 @@
-from dataclasses import dataclass
-from typing import List, Dict
+from dataclasses import dataclass, field
 from datetime import datetime
+from uuid import uuid4
 
-from src.entities import TransformationRecord, ImageSource
+from ..models.source import ImageSource
+from ..models.transformation import TransformationRecord
 
 
 @dataclass
@@ -12,21 +13,15 @@ class ImageData:
 
     id: уникальный идентификатор изображения
     source: объект ImageSource
-    original_format: исходный формат изображения
-    width, height: размеры изображения
-    current_state: путь к текущей версии изображения
     history: список применённых трансформаций
     created_at, updated_at: временные метки
     """
-    id: str
+
     source: ImageSource
-    original_format: str
-    width: int
-    height: int
-    current_state: str
-    history: List[TransformationRecord]
+    history: list[TransformationRecord]
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None
+    id: str = field(default_factory=lambda: uuid4().hex)
 
 
 @dataclass
@@ -42,10 +37,14 @@ class ImageFeatures:
     contrast: стандартное отклонение яркости
     computed_at: время вычисления признаков
     """
+
     id: str
     image_id: str
-    size: Dict[str, int]
+    width: int
+    height: int
     format: str
     mean_brightness: float
     contrast: float
-    computed_at: datetime
+    density: float
+    histogram: list[int]
+    computed_at: datetime = field(default_factory=datetime.utcnow)
