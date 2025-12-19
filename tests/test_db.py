@@ -4,6 +4,9 @@ import src.database.sqlite as db
 
 
 def test_init_db_creates_tables(tmp_path: Path, monkeypatch) -> None:
+    """
+    Проверка создания таблицы.
+    """
     test_db_path = tmp_path / 'test.sqlite3'
     monkeypatch.setattr(db, 'DB_PATH', test_db_path)
 

@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 def ask_path() -> Path:
+    """
+    Принимает от пользователя путь к изображению.
+    """
     while True:
         raw = input('Enter the path to the image: ').strip().strip('"').strip("'")
         path = Path(raw)
@@ -22,6 +25,9 @@ def ask_path() -> Path:
 
 
 def ask_option() -> Options:
+    """
+    Принимает от пользователя режим трансформации.
+    """
     available = [o.name for o in Options]
     prompt = (
         'Choose the transformstion regime:\n' + '\n'.join(f'  - {name}' for name in available) + '\nEnter the regime: '
@@ -35,6 +41,9 @@ def ask_option() -> Options:
 
 
 def ask_int(prompt: str) -> int:
+    """
+    Принимает от пользователя целочисленные значения.
+    """
     while True:
         raw = input(prompt).strip()
         try:
@@ -48,6 +57,9 @@ def ask_int(prompt: str) -> int:
 
 
 def ask_params(option: Options) -> Any:
+    """
+    Принимает от пользователя параметры трансформации.
+    """
     if option == Options.Resize:
         w = ask_int('Введите ширину (px): ')
         h = ask_int('Введите высоту (px): ')
