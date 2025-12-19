@@ -61,8 +61,8 @@ def ask_params(option: Options) -> Any:
     Принимает от пользователя параметры трансформации.
     """
     if option == Options.Resize:
-        w = ask_int('Введите ширину (px): ')
-        h = ask_int('Введите высоту (px): ')
+        w = ask_int('Enter the width (px): ')
+        h = ask_int('Enter the hight (px): ')
         return w, h
 
     if option == Options.Brightness:

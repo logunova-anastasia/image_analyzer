@@ -59,8 +59,10 @@ Choose the transformstion regime:
   - Brightness
   - Contrast
   - Filter
-Enter the regime: filter
-Enter the Filter (for example, 'blur', 'sharpen', 'edge_enhance', 'edges'): blur
+Enter the regime: resize
+Enter the width (px): 800
+Enter the height (px): 600
 Enter the name for the new file: new_sample1
 All done!
 ```
+![img.png](img.png)
