@@ -65,4 +65,5 @@ Enter the height (px): 600
 Enter the name for the new file: new_sample1
 All done!
 ```
-![img.png](img.png)
+
+<img alt="img.png" src="C:\Users\Анастасия\Desktop\other\python\image analyzer\image_analyzer\data\comparison.jpg"/>
