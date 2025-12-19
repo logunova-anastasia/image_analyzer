@@ -1,10 +1,8 @@
 # Image Analyzer
----
 
 Простой инструмент для анализа и трансформации изображений, извлечения базовых признаков и сохранения результатов в JSON.  
 
 ## Суть проекта
----
 
 - Загружает изображения с локального диска или по URL.
 - Применяет трансформации к изображениям.
@@ -13,7 +11,6 @@
 - Визуализирует модифицированные данные.
 
 ## Структура проекта
----
 ```
 image-analyzer/
 ├── src/
@@ -30,7 +27,6 @@ image-analyzer/
 ```
 
 ## Установка и запуск
----
 ### Клонирование репозитория
 ```
 git clone https://github.com/logunova-anastasia/image_analyzer.git
@@ -55,7 +51,6 @@ poetry run python main.py
 ```
 
 ## Пример работы
----
 ```
 Enter the path to the image: data/sample1.jpg
 Choose the transformstion regime:
