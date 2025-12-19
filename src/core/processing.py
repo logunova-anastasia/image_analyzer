@@ -1,33 +1,52 @@
+import logging
 from enum import Enum
-from typing import Any
 
 import numpy as np
+from numpy.typing import NDArray
 from PIL import Image, ImageEnhance, ImageFilter
+
+logger = logging.getLogger(__name__)
 
 
 def compute_mean_brightness(img: Image.Image) -> float:
     """Вычисляет среднюю яркость (grayscale)."""
-    gray = img.convert('L')
-    arr = np.asarray(gray, dtype=np.float32)
-    return float(arr.mean())
+    logger.debug(
+        'Computing mean brightness: size=%s, mode=%s',
+        getattr(img, 'size', None),
+        getattr(img, 'mode', None),
+    )
+    arr: NDArray[np.float32] = np.asarray(img.convert('L'), dtype=np.float32)
+    mean_value = float(arr.mean())
+    logger.debug('Mean brightness computed: %f', mean_value)
+    return mean_value
 
 
 def compute_contrast(img: Image.Image) -> float:
     """Вычисляет контраст (std dev яркости)."""
-    gray = img.convert('L')
-    arr = np.asarray(gray, dtype=np.float32)
-    return float(arr.std())
+    logger.debug(
+        'Computing contrast: size=%s, mode=%s',
+        getattr(img, 'size', None),
+        getattr(img, 'mode', None),
+    )
+    arr: NDArray[np.float32] = np.asarray(img.convert('L'), dtype=np.float32)
+    contrast_value = float(arr.std())
+    logger.debug('Contrast computed: %f', contrast_value)
+    return contrast_value
 
 
 def compute_edge_density(img: Image.Image) -> float:
     """Оценивает плотность краёв изображения."""
-    gray = img.convert('L')
-    edges = gray.filter(ImageFilter.FIND_EDGES)
+    logger.debug(
+        'Computing edge density: size=%s, mode=%s',
+        getattr(img, 'size', None),
+        getattr(img, 'mode', None),
+    )
 
-    arr = np.asarray(edges, dtype=np.float32)
+    arr: NDArray[np.float32] = np.asarray(img.convert('L').filter(ImageFilter.FIND_EDGES), dtype=np.float32)
     edges_mask = arr > 128
-    density = edges_mask.mean()
-    return float(density)
+    density = float(edges_mask.mean())
+    logger.debug('Edge density computed: %f', density)
+    return density
 
 
 class Options(Enum):
@@ -39,37 +58,53 @@ class Options(Enum):
 
 def resize(img: Image.Image, size: tuple[int, int]) -> Image.Image:
     """Изменение размера изображения."""
-    return img.resize(size)
+    logger.debug('Resizing image from %s to %s', getattr(img, 'size', None), size)
+    result = img.resize(size)
+    logger.debug('Image resized: new_size=%s', getattr(result, 'size', None))
+    return result
 
 
 def change_brightness(img: Image.Image, factor: float) -> Image.Image:
     """Изменение яркости (factor: 1.0 = no change)."""
+    logger.debug('Changing brightness with factor=%s', factor)
     enhancer = ImageEnhance.Brightness(img)
-    return enhancer.enhance(factor)
+    result = enhancer.enhance(factor)
+    logger.debug('Brightness changed with factor=%s', factor)
+    return result
 
 
 def change_contrast(img: Image.Image, factor: float) -> Image.Image:
     """Изменение контраста."""
+    logger.debug('Changing contrast with factor=%s', factor)
     enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(factor)
+    result = enhancer.enhance(factor)
+    logger.debug('Contrast changed with factor=%s', factor)
+    return result
 
 
-def apply_filter(img: Image.Image, params: dict[str, Any]) -> Image.Image:
+def apply_filter(img: Image.Image, ftype: str) -> Image.Image:
     """Применяет фильтр (blur, sharpen, edge_enhance и т.п.)."""
-    ftype = params.get('type')
+    logger.debug('Applying filter: type=%s, params=%r', ftype)
 
     if ftype == 'blur':
-        radius = params.get('radius', 2)
-        return img.filter(ImageFilter.GaussianBlur(radius))
+        logger.debug('Applying GaussianBlur with radius=%s', 10)
+        result = img.filter(ImageFilter.GaussianBlur(10))
 
     elif ftype == 'sharpen':
-        return img.filter(ImageFilter.SHARPEN)
+        logger.debug('Applying SHARPEN filter')
+        result = img.filter(ImageFilter.SHARPEN)
 
     elif ftype == 'edge_enhance':
-        return img.filter(ImageFilter.EDGE_ENHANCE)
+        logger.debug('Applying EDGE_ENHANCE filter')
+        result = img.filter(ImageFilter.EDGE_ENHANCE)
 
     elif ftype == 'edges':
-        return img.filter(ImageFilter.FIND_EDGES)
+        logger.debug('Applying FIND_EDGES filter')
+        result = img.filter(ImageFilter.FIND_EDGES)
 
     else:
+        logger.error('Unknown filter type: %s', ftype)
         raise ValueError(f'Unknown filter type: {ftype}')
+
+    logger.debug('Filter %s applied successfully', ftype)
+    return result

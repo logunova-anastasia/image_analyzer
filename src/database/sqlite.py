@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from collections.abc import Iterator
 
-from ..models.image import ImageFeatures
-from ..models.transformation import TransformationRecord
+from ..models import ImageFeatures, TransformationRecord
 
 DB_PATH = Path('src/database') / 'image_features.sqlite3'
+
+logger = logging.getLogger(__name__)
 
 
 def get_connection() -> sqlite3.Connection:
@@ -17,9 +19,13 @@ def get_connection() -> sqlite3.Connection:
     Создаёт соединение с SQLite, включает foreign_keys и row_factory=Row.
     """
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    logger.debug('Ensured database directory exists: %s', DB_PATH.parent)
+
+    logger.info('Opening SQLite connection to %s', DB_PATH)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute('PRAGMA foreign_keys = ON')
+    logger.debug('SQLite connection established, foreign_keys enabled')
     return conn
 
 
@@ -30,21 +36,29 @@ def db_cursor() -> Iterator[sqlite3.Cursor]:
     """
     conn = get_connection()
     cur = conn.cursor()
+    logger.debug('Database cursor created')
     try:
         yield cur
         conn.commit()
+        logger.debug('Transaction committed')
     except Exception:
+        logger.exception('Error during DB operation, rolling back transaction')
         conn.rollback()
         raise
     finally:
-        cur.close()
-        conn.close()
+        try:
+            cur.close()
+            logger.debug('Cursor closed')
+        finally:
+            conn.close()
+            logger.debug('Connection closed')
 
 
 def init_db() -> None:
     """
     Создаёт таблицы, если их ещё нет.
     """
+    logger.info('Initializing database schema (image_features, transformations)')
     with db_cursor() as cur:
         cur.executescript(
             """
@@ -70,12 +84,19 @@ def init_db() -> None:
             );
             """
         )
+    logger.info('Database schema initialized (or already existed)')
 
 
 def insert_transformation(record: TransformationRecord) -> None:
     """
     Сохраняет одну запись истории в таблицу transformations.
     """
+    logger.info(
+        'Inserting transformation: id=%s, image_id=%s, name=%s',
+        record.id,
+        record.image_id,
+        record.name,
+    )
     with db_cursor() as cur:
         cur.execute(
             """
@@ -92,12 +113,20 @@ def insert_transformation(record: TransformationRecord) -> None:
                 record.applied_at.isoformat(),
             ),
         )
+    logger.debug('Transformation %s inserted successfully', record.id)
 
 
 def insert_image_features(features: ImageFeatures) -> None:
     """
     Сохраняет признаки изображения в таблицу image_features.
     """
+    logger.info(
+        'Inserting image features: image_id=%s, width=%d, height=%d, format=%s',
+        features.image_id,
+        features.width,
+        features.height,
+        features.format,
+    )
     with db_cursor() as cur:
         cur.execute(
             """
@@ -126,3 +155,4 @@ def insert_image_features(features: ImageFeatures) -> None:
                 features.computed_at.isoformat(),
             ),
         )
+    logger.debug('Image features inserted for image_id=%s', features.image_id)

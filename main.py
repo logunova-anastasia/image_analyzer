@@ -1,64 +1,73 @@
 from __future__ import annotations
 
-import argparse
+import logging
 from pathlib import Path
 
 from src.core.analysis import analyze, apply_operation
-from src.core.io import load_image, save_image
-from src.core.processing import Options
+from src.core.io import ask_option, ask_params, ask_path, load_image, save_image
 from src.core.visualization import compare_before_after, plot_histogram
-from src.database.sqlite import init_db
+from src.database import init_db
 
-
-def parse_args() -> argparse.Namespace:
-    """
-    Получает от пользователя аргументы: путь к изображению, опцию для трансформации и параметры.
-    """
-    parser = argparse.ArgumentParser(description='Простой CLI для анализа изображений и сохранения данных в SQLite')
-    parser.add_argument(
-        'image',
-        type=Path,
-        help='The path to the input image',
-    )
-    parser.add_argument(
-        'option',
-        type=str,
-        choices=[o.name for o in Options],
-        help='Ways to transform the image. Available options: Resize, Brightness, Contrast, Filter.',
-    )
-
-    parser.add_argument(
-        'params',
-        help='Parameters for transformations.',
-    )
-
-    return parser.parse_args()
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    """
-    Основная реализация.
-    """
-    args = parse_args()
+    logger.info('Starting image analysis CLI')
 
+    logger.info('Initializing SQLite database')
     init_db()
+    logger.info('Database initialized successfully')
 
-    img_path: Path = args.image
-    option: Options = Options[args.option]
-    params = args.params
+    img_path = ask_path()
+    option = ask_option()
+    params = ask_params(option)
+    new_name = input('Enter the name for the new file: ').strip()
 
-    if not img_path.is_file():
-        raise SystemExit(f'Файл не найден: {img_path}')
+    logger.info('Input image path: %s', img_path)
+    logger.info('Selected option: %s', option.name)
+    logger.info('Transformation params: %s', params)
 
+    logger.info('Loading image')
     img, source, image_data = load_image(str(img_path))
-    features = analyze(img, image_data.id)
-    plot_histogram(features, 'data/plot.jpg')
+    logger.debug('Image loaded. Source: %s, image_data: %r', source, image_data)
 
-    if option is not None:
-        new_img, transformation = apply_operation(img, image_data, {option: params}, image_data.id)
-        compare_before_after(img, new_img, 'data/comp.jpg')
-        save_image(new_img, 'data/new.jpg')
+    logger.info('Analyzing image features')
+    features = analyze(img, image_data.id)
+    logger.debug('Extracted features: %r', features)
+
+    plot_output_path = Path('data/plot.jpg')
+    logger.info('Plotting histogram to %s', plot_output_path)
+    plot_histogram(features, str(plot_output_path))
+
+    logger.info('Applying transformation: %s', option.name)
+    new_img, transformation = apply_operation(
+        img,
+        image_data,
+        {option: params},
+        image_data.id,
+    )
+    logger.debug('Applied transformation: %r', transformation)
+
+    new_img_path = Path(f'data/{new_name}.jpg')
+    logger.info('Saving before/after comparison')
+    compare_before_after(img, new_img)
+
+    logger.info('Saving transformed image to %s', new_img_path)
+    save_image(new_img, str(new_img_path))
+
+    logger.info('Processing finished successfully')
+    print('All done!')
 
 
 if __name__ == '__main__':
-    main()
+    logging.basicConfig(
+        level=logging.INFO,
+        filename='logging.log',
+        filemode='w',
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    )
+    try:
+        main()
+    except Exception:
+        logger.exception('Unhandled exception in CLI')
+        raise
