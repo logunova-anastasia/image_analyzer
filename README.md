@@ -66,4 +66,4 @@ Enter the name for the new file: new_sample1
 All done!
 ```
 
-<img alt="img.png" src="C:\Users\Анастасия\Desktop\other\python\image analyzer\image_analyzer\data\comparison.jpg"/>
+<img alt="img.png" src=".\data\comparison.jpg"/>
