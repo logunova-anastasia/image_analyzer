@@ -1,10 +1,10 @@
 # Image Analyzer
+---
 
 Простой инструмент для анализа и трансформации изображений, извлечения базовых признаков и сохранения результатов в JSON.  
 
----
-
 ## Суть проекта
+---
 
 - Загружает изображения с локального диска или по URL.
 - Применяет трансформации к изображениям.
@@ -12,9 +12,8 @@
 - Сохраняет результаты анализа и историю изменений в JSON.
 - Визуализирует модифицированные данные.
 
----
-
 ## Структура проекта
+---
 ```
 image-analyzer/
 ├── src/
@@ -22,33 +21,41 @@ image-analyzer/
 │   ├── models/            # Модели данных
 │   └── database/          # Работа с SQLite 
 │ 
-├── tests/
-├── data/                  # Примеры изображений
+├── tests/                 # Автоматические тесты
+├── data/                  # Директория для изображений
 ├── main.py                # Точка входа CLI-приложения
 ├── pyproject.toml         # Конфигурация Poetry
 ├── README.md              # Документация
 └── .gitignore
 ```
+
+## Установка и запуск
 ---
-## Setup 
+### Клонирование репозитория
 ```
-# Клонирование репозитория
 git clone https://github.com/logunova-anastasia/image_analyzer.git
 cd image_analyzer
+```
 
-# Создание виртуального окружения
+### Создание виртуального окружения
+```
 python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
 .venv/Scripts/activate  # Windows
+```
 
-# Установка зависимостей
+### Установка зависимостей
+```
 poetry install
+```
 
-# Запуск программы
+### Запуск программы
+```
 poetry run python main.py
 ```
+
+## Пример работы
 ---
-## Example
 ```
 Enter the path to the image: data/sample1.jpg
 Choose the transformstion regime:
@@ -61,5 +68,3 @@ Enter the Filter (for example, 'blur', 'sharpen', 'edge_enhance', 'edges'): blur
 Enter the name for the new file: new_sample1
 All done!
 ```
----
-Good luck and have fun!
