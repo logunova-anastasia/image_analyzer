@@ -36,6 +36,11 @@ image-analyzer/
 git clone https://github.com/logunova-anastasia/image_analyzer.git
 cd image_analyzer
 
+# Создание виртуального окружения
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+.venv/Scripts/activate  # Windows
+
 # Установка зависимостей
 poetry install
 
@@ -57,4 +62,4 @@ Enter the name for the new file: new_sample1
 All done!
 ```
 ---
-# Good luck and have fun!
+Good luck and have fun!
