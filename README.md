@@ -1,5 +1,3 @@
-# image_analyzer
-
 # Image Analyzer
 
 Простой инструмент для анализа и трансформации изображений, извлечения базовых признаков и сохранения результатов в JSON.  
@@ -31,11 +29,11 @@ image-analyzer/
 ├── README.md              # Документация
 └── .gitignore
 ```
-
+---
 ## Setup 
 ```
 # Клонирование репозитория
-git clone https://github.com/logunova-anastasia/image_analyzer
+git clone https://github.com/logunova-anastasia/image_analyzer.git
 cd image_analyzer
 
 # Установка зависимостей
@@ -43,8 +41,8 @@ poetry install
 
 # Запуск программы
 poetry run python main.py
-
 ```
+---
 ## Example
 ```
 Enter the path to the image: data/sample1.jpg
@@ -58,5 +56,5 @@ Enter the Filter (for example, 'blur', 'sharpen', 'edge_enhance', 'edges'): blur
 Enter the name for the new file: new_sample1
 All done!
 ```
-
-## Good luck and have fun!
+---
+# Good luck and have fun!
