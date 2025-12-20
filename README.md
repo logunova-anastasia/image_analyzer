@@ -34,13 +34,6 @@ git clone https://github.com/logunova-anastasia/image_analyzer.git
 cd image_analyzer
 ```
 
-### Создание виртуального окружения
-```
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-.venv/Scripts/activate  # Windows
-```
-
 ### Установка зависимостей
 ```
 poetry install
