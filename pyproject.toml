@@ -4,38 +4,40 @@ version = "1.0.0"
 description = ""
 authors = ["Logunova Anastasiia"]
 readme = "README.md"
+# Нет, это так не работает. У вас в src 3 модуля - core, database, models. Нужно указывать, какой именно нужно собрать в пакет.
+# Хотя, судя по всему, вам сборка пакета не нужна вообще -> packages не нужно указывать, а package-mode поставить False
 packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.14"
+python = ">=3.11,<3.14"  # Все версии лучше строго фиксировать
 pillow = "^10.0"
 numpy = "^1.26"
 matplotlib = "^3.8"
 
 [tool.poetry.group.dev.dependencies]
-isort = "5.12.0"
+isort = "5.12.0"  # уже есть в ruff
 ruff = "0.1.0"
 mypy = "1.0.0"
 pre-commit = "3.0.0"
 pytest = "8.0.0"
 
-[tool.pytest.ini_options]
+[tool.pytest.ini_options]  # если указать путь к основному коду (pythonpath), то тесты будет запускать еще проще
 testpaths = ["tests"]
 pythonpath = ["."]
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+[build-system]  # Если вы не делаете сборку вашего проекта в пакет, то этот блок не нужен
+requires = ["poetry-core>=2.0.0,<3.0.0"]  # Здесь тоже
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 120
-target-version = "py311"
+target-version = "py311"  # Вы даете диапозон версий питона, но для Ruff указываете 1 конкретную. Это некорректно
 
 [tool.ruff.format]
 quote-style = "single"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "B", "UP", "N", "C4", "SIM"]
+select = ["E", "F", "W", "B", "UP", "N", "C4", "SIM"]  # Почему вы не все правила с пары используете?
 fixable = ["ALL"]
 unfixable = []
 
@@ -47,7 +49,7 @@ include_trailing_comma = true
 combine_as_imports = true
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.11"  # то же самое про версию
 warn_unused_configs = true
 ignore_missing_imports = true
 check_untyped_defs = true

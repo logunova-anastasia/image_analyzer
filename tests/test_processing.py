@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from src.core.processing import (
+from src.core.processing import (  # from core.processing import ...
     change_brightness,
     change_contrast,
     compute_contrast,

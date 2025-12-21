@@ -1,6 +1,7 @@
 from pathlib import Path
 
-import src.database.sqlite as db
+import src.database.sqlite as db  # Неправильный импорт
+# Правильный: import database.sqlite as db
 
 
 def test_init_db_creates_tables(tmp_path: Path, monkeypatch) -> None:

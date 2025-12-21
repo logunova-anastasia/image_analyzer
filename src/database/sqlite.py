@@ -7,9 +7,13 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
-from ..models import ImageFeatures, TransformationRecord
+from ..models import ImageFeatures, TransformationRecord  # Нельзя так писать импорты внутри модулей
+# Правильно: from src.models import ImageFeatures, TransformationRecord
+# Иначе все просто развалится в изолированной среде, например, в докере
 
 DB_PATH = Path('src/database') / 'image_features.sqlite3'
+# Лучше "собирать" путь так: `Path('src/database', 'image_features.sqlite3')`
+# Чтобы избежать двусмысленного прочтения символа `/`
 
 logger = logging.getLogger(__name__)
 
