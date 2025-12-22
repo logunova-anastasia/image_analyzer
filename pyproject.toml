@@ -8,8 +8,9 @@ readme = "README.md"
 # Хотя, судя по всему, вам сборка пакета не нужна вообще -> packages не нужно указывать, а package-mode поставить False
 packages = [{ include = "src" }]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.14"  # Все версии лучше строго фиксировать
+[tool.poetry.dependencies]  # Все версии нужно строго фиксировать, например "==3.11.*"
+# Для Poetry 2 версию Python нужно указывать в `tool.poetry.requires-python`. Так, как у вас, тоже будет работать, но это оформление в любой момент может перестать поддержтиваться.
+python = ">=3.11,<3.14"
 pillow = "^10.0"
 numpy = "^1.26"
 matplotlib = "^3.8"
