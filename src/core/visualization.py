@@ -6,7 +6,7 @@ import numpy as np
 from numpy.typing import NDArray
 from PIL import Image
 
-from ..models import ImageFeatures
+from ..models import ImageFeatures  # from src.models import ...
 
 logger = logging.getLogger(__name__)
 

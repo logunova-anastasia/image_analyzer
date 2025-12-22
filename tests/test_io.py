@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from src.core.io import load_image, save_image
+from src.core.io import load_image, save_image  # from core.io import load_image, save_image
 
 
 def test_load_png(tmp_path: Path) -> None:

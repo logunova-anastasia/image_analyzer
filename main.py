@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from src.core.analysis import analyze, apply_operation
+from src.core.analysis import analyze, apply_operation  # все это нужно было вынести в /core/__init__.py
 from src.core.io import ask_option, ask_params, ask_path, load_image, save_image
 from src.core.visualization import compare_before_after, plot_histogram
 from src.database import init_db

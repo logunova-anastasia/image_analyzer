@@ -6,7 +6,7 @@ from typing import Any
 
 from PIL import Image
 
-from ..models import ImageData, ImageSource
+from ..models import ImageData, ImageSource  # from src.models import ...
 from .processing import Options
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def ask_option() -> Options:
     """
     Принимает от пользователя режим трансформации.
     """
-    available = [o.name for o in Options]
+    available = [o.name for o in Options]  # Expected type 'collections. Iterable', got 'Type[Options]' instead
     prompt = (
         'Choose the transformstion regime:\n' + '\n'.join(f'  - {name}' for name in available) + '\nEnter the regime: '
     )
@@ -36,7 +36,7 @@ def ask_option() -> Options:
         raw = input(prompt).strip()
         match = next((name for name in available if name.lower() == raw.lower()), None)
         if match is not None:
-            return Options[match]
+            return Options[match]  # Expected type 'Options', got 'Type[Options]' instead
         print('Wrong regime. Try again.')
 
 

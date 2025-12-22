@@ -8,6 +8,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 logger = logging.getLogger(__name__)
 
 
+# Докстринги неполные - нет описания параметров и ретерна
 def compute_mean_brightness(img: Image.Image) -> float:
     """Вычисляет среднюю яркость (grayscale)."""
     logger.debug(
@@ -49,6 +50,7 @@ def compute_edge_density(img: Image.Image) -> float:
     return density
 
 
+# Enum-ы лучше унести в отдельный файл
 class Options(Enum):
     Resize = 1
     Brightness = 2

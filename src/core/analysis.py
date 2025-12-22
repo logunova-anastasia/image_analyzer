@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from PIL import Image
 
-from ..core.processing import (
+from ..core.processing import (  # from .processing import ...
     Options,
     apply_filter,
     change_brightness,
@@ -15,8 +15,8 @@ from ..core.processing import (
     compute_mean_brightness,
     resize,
 )
-from ..database import insert_image_features, insert_transformation
-from ..models import ImageData, ImageFeatures, TransformationRecord
+from ..database import insert_image_features, insert_transformation  # from src.database import ...
+from ..models import ImageData, ImageFeatures, TransformationRecord  # from src.models import ...
 
 logger = logging.getLogger(__name__)
 
@@ -38,12 +38,14 @@ def apply_operation(
 
         if key == Options.Resize:
             logger.debug('Resizing image from %s with size=%r', getattr(result, 'size', None), value)
-            result = resize(img, tuple(value))
+            result = resize(img, tuple(value))  # Expected type 'tuple[int, int]', got 'tuple' instead
             logger.debug('Image resized, new size=%s', getattr(result, 'size', None))
 
         elif key == Options.Brightness:
             logger.debug('Changing brightness with factor=%s', value)
             result = change_brightness(img, float(value))
+            # Не работает :(
+            # ValueError: could not convert string to float: '1\udcd1.5'
 
         elif key == Options.Contrast:
             logger.debug('Changing contrast with factor=%s', value)

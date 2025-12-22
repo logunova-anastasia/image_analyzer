@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import uuid4
 
-from ..models.source import ImageSource
-from ..models.transformation import TransformationRecord
+from ..models.source import ImageSource  # from .source import ImageSource
+from ..models.transformation import TransformationRecord  # from .transformation import TransformationRecord
 
 
 @dataclass
